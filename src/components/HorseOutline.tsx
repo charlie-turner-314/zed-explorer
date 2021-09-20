@@ -30,7 +30,6 @@ interface Career {
 const HorseOutline = ({ horse }: Props) => {
   const [career, setCareer] = useState<Career | null>(null);
   useEffect(() => {
-    console.log("what");
     const fetchData = async (horseId: number) => {
       let total = 0,
         first = 0,
@@ -95,9 +94,9 @@ const HorseOutline = ({ horse }: Props) => {
       }%`}</td>
       <td>{career.fees.toFixed(3)}</td>
       <td>{Number(career.winnings).toFixed(3)}</td>
-      <td>{`${Number((career.winnings - career.fees) / career.fees).toFixed(
-        2
-      )}%`}</td>
+      <td>{`${Number(
+        ((career.winnings - career.fees) / career.fees) * 100
+      ).toFixed(2)}%`}</td>
     </tr>
   );
 };

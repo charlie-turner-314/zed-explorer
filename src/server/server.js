@@ -60,15 +60,6 @@ app.get("/api/getStableHorses/:stableAddress", async (req, res) => {
   res.send(horseList);
 });
 
-app.get("/api/getStableAddress/:stableSlug", async (req, res) => {
-  const slug = req.params.stableSlug;
-  const result = await (
-    await fetch("https://api.zed.run/api/v1/users/stable/" + String(slug))
-  ).json();
-  console.log(await result);
-  res.send("nah");
-});
-
 app.get("/api/getHorses", async (req, res) => {
   await client.connect();
   const result = await horses.find({}).limit(10);
@@ -78,4 +69,20 @@ app.get("/api/getHorses", async (req, res) => {
   }
   await res.send(results);
   await client.close();
+});
+
+app.get("/api/getStableSlug/:address", async (req, res) => {
+  const url = "https://api.zed.run/api/v1/users/get_user";
+  const options = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: `{"addresses":["${String(req.params.address)}"]}`,
+  };
+  const data = await fetch(url, options);
+  const json = await data.json();
+  const slug = json.users[0].stable_slug;
+
+  res.send({ slug });
 });
